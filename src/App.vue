@@ -58,7 +58,7 @@ const emoji = ['🅾️', '❎']
         <div
           v-for="(cell, j) in row"
           :key="j"
-          :class="[cell ? 'cursor-not-allowed' : 'hover:bg-green/25 transition duration-100']"
+          :class="[cell ? 'cursor-not-allowed' : 'hover:bg-green/10 transition duration-100']"
           class="grid place-items-center w-28 h-28 cursor-crosshair even:border-l-2 even:border-r-2"
           @click="makeMove(i, j)"
         >
@@ -68,15 +68,19 @@ const emoji = ['🅾️', '❎']
     </div>
 
     <div class="mt-10 h-32">
-      <Transition
-        enter-from-class="opacity-0"
-        enter-active-class="transition duration-200"
-        leave-to-class="opacity-0"
-        leave-active-class="transition duration-200"
-      >
+      <Transition enter-from-class="opacity-0 translate-y-10" leave-to-class="opacity-0 translate-y-10">
         <button
           v-if="finished"
-          class="border border-green border-2 border-dashed uppercase text-green tracking-wide px-6 py-3 rounded-lg"
+          class="
+            border border-green border-2 border-dashed
+            uppercase
+            text-green
+            tracking-wide
+            px-6
+            py-3
+            rounded-lg
+            transition
+          "
           @click="restart"
         >
           Restart
