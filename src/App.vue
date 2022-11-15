@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-type Move = 0 | 1
+enum Move {
+  X = 'X',
+  O = 'O',
+}
+
 type Cell = Move | null
 type Row = [Cell, Cell, Cell]
 type Board = [Row, Row, Row]
@@ -15,8 +19,8 @@ function initBoard(): Board {
 }
 
 const board = ref<Board>(initBoard())
-const move = ref<Move>(0)
-const finished = ref(false)
+const move = ref<Move>(Move.X)
+const finished = computed(() => board.value.every(row => row.every(Boolean)))
 
 function allEqual<T>(arr: T): boolean {
   return arr.every(v => v === arr[0])
@@ -27,14 +31,20 @@ function hasWon(row: number, col: number): boolean {
 }
 
 function swap(): void {
-  move.value = move.value === 0 ? 1 : 0
+  move.value = move.value === Move.X ? Move.O : Move.X
 }
 
 function makeMove(row: number, col: number): void {
-  if (board.value[row][col] !== null) return
+  if (board.value[row][col]) return
   board.value[row][col] = move.value
   swap()
 }
+
+function restart(): void {
+  board.value = initBoard()
+}
+
+const emoji = ['🅾️', '❎']
 </script>
 
 <template>
@@ -48,7 +58,7 @@ function makeMove(row: number, col: number): void {
         <div
           v-for="(cell, j) in row"
           :key="j"
-          :class="[cell === null && 'hover:bg-green/25 transition duration-100']"
+          :class="[cell ? 'cursor-not-allowed' : 'hover:bg-green/25 transition duration-100']"
           class="grid place-items-center w-28 h-28 cursor-crosshair even:border-l-2 even:border-r-2"
           @click="makeMove(i, j)"
         >
@@ -57,12 +67,21 @@ function makeMove(row: number, col: number): void {
       </div>
     </div>
 
-    <div v-if="finished" class="mt-10">
-      <button
-        class="border border-green border-2 border-dashed uppercase text-green tracking-wide px-6 py-3 rounded-lg"
+    <div class="mt-10 h-32">
+      <Transition
+        enter-from-class="opacity-0"
+        enter-active-class="transition duration-200"
+        leave-to-class="opacity-0"
+        leave-active-class="transition duration-200"
       >
-        Play
-      </button>
+        <button
+          v-if="finished"
+          class="border border-green border-2 border-dashed uppercase text-green tracking-wide px-6 py-3 rounded-lg"
+          @click="restart"
+        >
+          Restart
+        </button>
+      </Transition>
     </div>
   </div>
 </template>
