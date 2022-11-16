@@ -54,22 +54,22 @@ function move(address: Address): void {
   <div class="w-full h-full flex flex-col justify-center items-center">
     <div class="grid grid-rows-3 place-items-center select-none">
       <div
-        v-for="(row, i) in board"
+        v-for="(cells, row) in board"
         :key="i"
         class="grid grid-cols-3 place-items-center border-gray-dark even:border-t-2 even:border-b-2 even:-my-2"
       >
         <button
-          v-for="(cell, j) in row"
+          v-for="(value, col) in cells"
           :key="j"
           :class="[
-            cell
+            value
               ? 'cursor-not-allowed'
               : 'cursor-crosshair transition duration-100 hover:bg-green/10 focus:bg-green/10',
           ]"
           class="grid place-items-center w-28 h-28 outline-none even:border-l-2 even:border-r-2"
-          @click="move({ row: i, col: j })"
+          @click="move({ row, col })"
         >
-          {{ cell }}
+          {{ value }}
         </button>
       </div>
     </div>
