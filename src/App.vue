@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-enum Move {
+enum Player {
   X = 'X',
   O = 'O',
 }
 
-type Cell = Move | null
+type Cell = Player | null
 type Row = [Cell, Cell, Cell]
 type Board = [Row, Row, Row]
+type Address = { row: number; col: number }
 
-function initBoard(): Board {
+function createBoard(): Board {
   return [
     [null, null, null],
     [null, null, null],
@@ -18,33 +19,35 @@ function initBoard(): Board {
   ]
 }
 
-const board = ref<Board>(initBoard())
-const move = ref<Move>(Move.X)
-const finished = computed(() => board.value.every(row => row.every(Boolean)))
-
-function allEqual<T>(arr: T): boolean {
-  return arr.every(v => v === arr[0])
+function randomPlayer(): Player {
+  return [Player.X, Player.O][Math.round(Math.random())]
 }
 
-function hasWon(row: number, col: number): boolean {
-  return allEqual(board.value[row])
+const board = ref<Board>(createBoard())
+const player = ref<Player>(randomPlayer())
+
+function restart(): void {
+  board.value = createBoard()
+  player.value = randomPlayer()
+}
+
+function get({ row, col }: Address): Cell {
+  return board.value[row][col]
+}
+
+function set({ row, col }: Address, value: Cell): void {
+  board.value[row][col] = value
 }
 
 function swap(): void {
-  move.value = move.value === Move.X ? Move.O : Move.X
+  player.value = player.value === Player.X ? Player.O : Player.X
 }
 
-function makeMove(row: number, col: number): void {
-  if (board.value[row][col]) return
-  board.value[row][col] = move.value
+function move(address: Address): void {
+  if (get(address)) return
+  set(address, player.value)
   swap()
 }
-
-function restart(): void {
-  board.value = initBoard()
-}
-
-const emoji = ['🅾️', '❎']
 </script>
 
 <template>
@@ -55,37 +58,39 @@ const emoji = ['🅾️', '❎']
         :key="i"
         class="grid grid-cols-3 place-items-center border-gray-dark even:border-t-2 even:border-b-2 even:-my-2"
       >
-        <div
+        <button
           v-for="(cell, j) in row"
           :key="j"
-          :class="[cell ? 'cursor-not-allowed' : 'hover:bg-green/10 transition duration-100']"
-          class="grid place-items-center w-28 h-28 cursor-crosshair even:border-l-2 even:border-r-2"
-          @click="makeMove(i, j)"
+          :class="[
+            cell
+              ? 'cursor-not-allowed'
+              : 'cursor-crosshair transition duration-100 hover:bg-green/10 focus:bg-green/10',
+          ]"
+          class="grid place-items-center w-28 h-28 outline-none even:border-l-2 even:border-r-2"
+          @click="move({ row: i, col: j })"
         >
           {{ cell }}
-        </div>
+        </button>
       </div>
     </div>
 
     <div class="mt-10 h-32">
-      <Transition enter-from-class="opacity-0 translate-y-10" leave-to-class="opacity-0 translate-y-10">
-        <button
-          v-if="finished"
-          class="
-            border border-green border-2 border-dashed
-            uppercase
-            text-green
-            tracking-wide
-            px-6
-            py-3
-            rounded-lg
-            transition
-          "
-          @click="restart"
-        >
-          Restart
-        </button>
-      </Transition>
+      <button
+        class="
+          border border-green border-2 border-dashed
+          uppercase
+          text-green
+          tracking-wide
+          px-6
+          py-3
+          rounded-lg
+          transition
+          hover:scale-105
+        "
+        @click="restart()"
+      >
+        Restart
+      </button>
     </div>
   </div>
 </template>
