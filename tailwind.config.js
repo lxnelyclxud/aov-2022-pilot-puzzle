@@ -3,6 +3,8 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,vue}'],
   theme: {
     colors: {
+      current: 'currentColor',
+      transparent: 'transparent',
       green: '#42b883',
       'gray-dark': '#0f172a',
     },

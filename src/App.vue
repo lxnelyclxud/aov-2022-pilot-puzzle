@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 enum Player {
   X = 'X',
@@ -7,90 +7,111 @@ enum Player {
 }
 
 type Cell = Player | null
-type Row = [Cell, Cell, Cell]
-type Board = [Row, Row, Row]
-type Address = { row: number; col: number }
+type Board = Cell[]
+type Line = [number, number, number]
+
+const LINES: Line[] = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+]
 
 function createBoard(): Board {
-  return [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ]
+  return Array(9).fill(null)
 }
 
 function randomPlayer(): Player {
   return [Player.X, Player.O][Math.round(Math.random())]
 }
 
-const board = ref<Board>(createBoard())
-const player = ref<Player>(randomPlayer())
+const board = ref(createBoard())
+const player = ref(randomPlayer())
+const winnerLine = ref<Line | null>(null)
+const finished = computed(() => board.value.every(Boolean) || winnerLine.value)
 
 function restart(): void {
   board.value = createBoard()
   player.value = randomPlayer()
+  winnerLine.value = null
 }
 
-function get({ row, col }: Address): Cell {
-  return board.value[row][col]
+function check(): boolean {
+  winnerLine.value = LINES.find(l => l.every(i => board.value[i] === player.value)) ?? null
+  return !!winnerLine.value
 }
 
-function set({ row, col }: Address, value: Cell): void {
-  board.value[row][col] = value
-}
-
-function swap(): void {
+function move(index: number): void {
+  if (board.value[index] || finished.value) return
+  board.value[index] = player.value
+  if (check()) return
   player.value = player.value === Player.X ? Player.O : Player.X
-}
-
-function move(address: Address): void {
-  if (get(address)) return
-  set(address, player.value)
-  swap()
 }
 </script>
 
 <template>
   <div class="w-full h-full flex flex-col justify-center items-center">
-    <div class="grid grid-rows-3 place-items-center select-none">
-      <div
-        v-for="(cells, row) in board"
-        :key="i"
-        class="grid grid-cols-3 place-items-center border-gray-dark even:border-t-2 even:border-b-2 even:-my-2"
-      >
-        <button
-          v-for="(value, col) in cells"
-          :key="j"
-          :class="[
-            value
-              ? 'cursor-not-allowed'
-              : 'cursor-crosshair transition duration-100 hover:bg-green/10 focus:bg-green/10',
-          ]"
-          class="grid place-items-center w-28 h-28 outline-none even:border-l-2 even:border-r-2"
-          @click="move({ row, col })"
-        >
-          {{ value }}
-        </button>
-      </div>
+    <div class="grid grid-rows-3 grid-cols-3 select-none">
+      <button
+        v-for="(value, index) in board"
+        :key="index"
+        :class="[
+          value?.toLowerCase(),
+          winnerLine?.includes(index) && 'bg-green/10',
+          value || finished ? 'cursor-not-allowed' : `cursor-crosshair`,
+        ]"
+        class="cell"
+        @click="move(index)"
+      />
     </div>
 
-    <div class="mt-10 h-32">
-      <button
-        class="
-          border border-green border-2 border-dashed
-          uppercase
-          text-green
-          tracking-wide
-          px-6
-          py-3
-          rounded-lg
-          transition
-          hover:scale-105
-        "
-        @click="restart()"
-      >
-        Restart
-      </button>
-    </div>
+    <button
+      :class="{ 'animate-bounce': finished }"
+      class="mt-20 border-green border-2 border-dashed uppercase text-green tracking-wide px-6 py-3 rounded-lg"
+      @click="restart()"
+    >
+      Restart
+    </button>
   </div>
 </template>
+
+<style scoped>
+.cell {
+  @apply w-28 h-28 p-3 outline-none text-green border-gray-dark transition duration-100;
+}
+
+.cell:nth-child(3n + 2) {
+  @apply border-x-2;
+}
+
+.cell:nth-child(n + 4):nth-child(-n + 6) {
+  @apply border-y-2;
+}
+
+.x {
+  @apply relative;
+}
+
+.x::before,
+.x::after {
+  content: '';
+  @apply absolute top-0 h-full w-1 bg-current;
+}
+
+.x::before {
+  @apply rotate-45;
+}
+
+.x::after {
+  @apply -rotate-45;
+}
+
+.o::before {
+  content: '';
+  @apply border-current border-4 w-full h-full block rounded-full;
+}
+</style>
