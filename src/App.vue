@@ -55,7 +55,7 @@ function move(index: number): void {
 
 <template>
   <div class="w-full h-full flex flex-col justify-center items-center">
-    <div class="grid grid-rows-3 grid-cols-3 select-none">
+    <div class="w-full max-w-lg aspect-square grid grid-rows-3 grid-cols-3 select-none p-6">
       <button
         v-for="(value, index) in board"
         :key="index"
@@ -71,7 +71,7 @@ function move(index: number): void {
 
     <button
       :class="{ 'animate-bounce': finished }"
-      class="mt-20 border-green border-2 border-dashed uppercase text-green tracking-wide px-6 py-3 rounded-lg"
+      class="border-green mt-8 border-2 border-dashed uppercase text-green tracking-wide px-6 py-3 rounded-lg"
       @click="restart()"
     >
       Restart
@@ -81,7 +81,7 @@ function move(index: number): void {
 
 <style scoped>
 .cell {
-  @apply w-28 h-28 p-3 outline-none text-green border-gray-dark transition duration-100;
+  @apply p-3 outline-none text-green border-gray-dark transition duration-100;
 }
 
 .cell:nth-child(3n + 2) {
