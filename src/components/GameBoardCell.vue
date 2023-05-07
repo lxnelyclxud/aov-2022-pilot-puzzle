@@ -1,22 +1,26 @@
-<template>
-  <button :disabled="disabled" :class="[value?.toLowerCase(), highlighted && 'bg-green/10']" class="cell" />
-</template>
-
 <script setup lang="ts">
-import { Cell } from '../types';
+import type { Cell } from '../types'
 
 type Props = {
-  value: Cell;
-  highlighted?: boolean;
-  disabled?: boolean;
-};
+  value: Cell
+  highlighted?: boolean
+  disabled?: boolean
+}
 
-defineProps<Props>();
+defineProps<Props>()
 </script>
+
+<template>
+  <button
+    :disabled="disabled"
+    :class="[value?.toLowerCase(), highlighted && 'bg-green/10']"
+    class="cell"
+  />
+</template>
 
 <style scoped>
 .cell {
-  @apply p-3 text-green border-gray-dark cursor-crosshair transition duration-100 disabled:cursor-not-allowed;
+  @apply p-3 text-green cursor-crosshair transition duration-100 disabled:cursor-not-allowed;
 }
 
 .cell:nth-child(3n + 2) {

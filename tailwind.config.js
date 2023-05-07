@@ -1,12 +1,27 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./index.html', './src/**/*.{js,vue}'],
   theme: {
     colors: {
       current: 'currentColor',
-      transparent: 'transparent',
-      green: '#42b883',
-      'gray-dark': '#0f172a',
+      transparent: 'transparent'
     },
-  },
+    borderColor: {
+      DEFAULT: 'var(--color-border)',
+      current: 'currentColor',
+      transparent: 'transparent'
+    },
+    textColor: {
+      DEFAULT: 'var(--color-text)',
+      green: 'hsla(160, 100%, 37%, 1)'
+    },
+    backgroundColor: {
+      DEFAULT: 'var(--color-background)',
+      soft: 'var(--color-background-soft)',
+      mute: 'var(--color-background-mute)',
+      green: 'hsla(160, 100%, 37%, 1)',
+      current: 'currentColor',
+      transparent: 'transparent'
+    }
+  }
 }

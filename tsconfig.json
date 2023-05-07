@@ -1,7 +1,14 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "NodeNext",
-    "target": "ESNext",
-    "strict": true
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.vitest.json"
+    }
+  ]
 }
