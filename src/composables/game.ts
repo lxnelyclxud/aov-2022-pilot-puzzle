@@ -1,50 +1,31 @@
 import { ref, computed } from 'vue'
 import { Line, Player, Board } from '@/types'
+import { setByIndex, swap } from '@/utils'
 
-function swap<T>(v: T, o1: T, o2: T): T {
-  return v === o1 ? o2 : o1
-}
+const LINES: Line[] = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+]
 
-function setByIndex<T>(index: number, value: T, arr: T[]): T[] {
-  return arr.map((v, i) => (i === index ? value : v))
-}
+const check = (board: Board, player: Player): Line | null =>
+  LINES.find((l) => l.every((i) => board[i] === player)) ?? null
 
-export function createBoard(): Board {
-  return Array(9).fill(null)
-}
+const createBoard = (): Board => Array(9).fill(null)
 
-export function randomPlayer(): Player {
-  return [Player.X, Player.O][Math.round(Math.random())]
-}
+const randomPlayer = (): Player => [Player.X, Player.O][Math.round(Math.random())]
 
-export function isFull(grid: Board): boolean {
-  return grid.every(Boolean)
-}
+const isFull = (board: Board): boolean => !board.includes(null)
 
-export function check(player: Player, grid: Board): Line | null {
-  const lines: Line[] = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ]
+const next = (player: Player): Player => swap(player, Player.X, Player.O)
 
-  return lines.find((l) => l.every((i) => grid[i] === player)) ?? null
-}
-
-export function next(player: Player): Player {
-  return swap(player, Player.X, Player.O)
-}
-
-export function move(index: number, player: Player, grid: Board): Board {
-  if (grid[index] || isFull(grid)) return grid
-
-  return setByIndex(index, player, grid)
-}
+const move = (index: number, player: Player, board: Board): Board =>
+  board[index] || isFull(board) ? board : setByIndex(index, player, board)
 
 export const useGame = () => {
   const board = ref<Board>(createBoard())
@@ -66,7 +47,7 @@ export const useGame = () => {
       if (finished.value) return
       player.value = next(player.value)
       board.value = move(index, player.value, board.value)
-      winLine.value = check(player.value, board.value)
+      winLine.value = check(board.value, player.value)
     }
   }
 }

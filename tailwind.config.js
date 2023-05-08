@@ -4,24 +4,21 @@ export default {
   theme: {
     colors: {
       current: 'currentColor',
-      transparent: 'transparent'
-    },
-    borderColor: {
-      DEFAULT: 'var(--color-border)',
-      current: 'currentColor',
-      transparent: 'transparent'
-    },
-    textColor: {
-      DEFAULT: 'var(--color-text)',
-      green: 'hsla(160, 100%, 37%, 1)'
-    },
-    backgroundColor: {
-      DEFAULT: 'var(--color-background)',
-      soft: 'var(--color-background-soft)',
-      mute: 'var(--color-background-mute)',
-      green: 'hsla(160, 100%, 37%, 1)',
-      current: 'currentColor',
-      transparent: 'transparent'
+      transparent: 'transparent',
+      black: {
+        DEFAULT: '#181818',
+        soft: '#222222',
+        mute: '#282828'
+      },
+      white: {
+        DEFAULT: '#ffffff',
+        soft: '#f8f8f8',
+        mute: '#f2f2f2'
+      },
+      indigo: '#2c3e50',
+      gray: '#545454',
+      green: '#42b883',
+      red: '#ed3c50'
     }
   }
 }

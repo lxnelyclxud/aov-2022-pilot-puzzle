@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { Motion } from 'motion/vue'
+import { random as rnd } from '@/utils'
 import { Player, type Cell } from '@/types'
 
 type Props = {
   value: Cell
-  highlighted?: boolean
   disabled?: boolean
 }
 
 defineProps<Props>()
 
-const motionProps = {
+const DURATION = 0.6
+
+const transition = (duration = DURATION, delay = 0) => ({
+  duration,
+  delay,
+  ease: 'ease-out'
+})
+
+const draw = (progress = 1) => ({
   pathLength: '1',
   initial: {
     visibility: 'hidden',
@@ -19,16 +27,13 @@ const motionProps = {
   },
   animate: {
     visibility: 'visible',
-    strokeDashoffset: 0
-  },
-  exit: {
-    opacity: 0
+    strokeDashoffset: 1 - progress
   }
-}
+})
 </script>
 
 <template>
-  <button :disabled="disabled || !!value" :class="[highlighted && 'bg-green/10']" class="cell">
+  <button :disabled="disabled || !!value" class="p-3 cursor-crosshair disabled:cursor-not-allowed">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
@@ -41,41 +46,34 @@ const motionProps = {
       stroke-linejoin="round"
     >
       <Transition leave-active-class="opacity-0 transition duration-300">
-        <g v-if="value === Player.X">
-          <Motion v-bind="motionProps" :transition="{ duration: 0.5 }" tag="path" d="M18 6L6 18" />
+        <g v-if="value === Player.X" class="text-green">
           <Motion
-            v-bind="motionProps"
-            :transition="{ duration: 0.5, delay: 0.5 }"
+            v-bind="draw()"
+            :transition="transition(DURATION / 2)"
+            :d="`M${rnd(17, 19)} ${rnd(5.5)}L${rnd(5.5)} ${rnd(17, 19)}`"
             tag="path"
-            d="M6 6l12 12"
+          />
+          <Motion
+            v-bind="draw()"
+            :transition="transition(DURATION / 2, DURATION / 2)"
+            :d="`M${rnd(5, 7)} ${rnd(5.5)}l${rnd(11.5)} ${rnd(11, 13)}`"
+            tag="path"
           />
         </g>
 
         <Motion
           v-else-if="value === Player.O"
-          v-bind="motionProps"
-          :transition="{ duration: 1 }"
-          tag="circle"
+          v-bind="draw(rnd(0.92, 1))"
+          :rx="`${rnd(6, 8)}`"
+          :ry="`${rnd(6, 8)}`"
+          :style="{ transform: `rotate(-${rnd(50, 130)}deg)` }"
+          :transition="transition()"
+          tag="ellipse"
           cx="12"
           cy="12"
-          r="7"
-          class="-rotate-90 origin-center"
+          class="origin-center text-red"
         />
       </Transition>
     </svg>
   </button>
 </template>
-
-<style scoped>
-.cell {
-  @apply p-3 text-green cursor-crosshair disabled:cursor-not-allowed;
-}
-
-.cell:nth-child(3n + 2) {
-  @apply border-x-2;
-}
-
-.cell:nth-child(n + 4):nth-child(-n + 6) {
-  @apply border-y-2;
-}
-</style>
