@@ -49,7 +49,7 @@ const winLineCoords = (line: Line) => {
 </script>
 
 <template>
-  <div class="w-full max-w-lg aspect-square select-none p-6">
+  <div class="w-full max-w-lg aspect-square select-none">
     <div class="relative">
       <svg
         xmlns="http://www.w3.org/2000/svg"

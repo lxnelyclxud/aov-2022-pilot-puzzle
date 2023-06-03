@@ -6,7 +6,7 @@
     <Body
       class="h-full select-none bg-black text-white-mute antialiased [&>div]:h-full [&>div]:flex [&>div]:flex-col"
     >
-      <header class="container mx-auto max-w-3xl py-4">
+      <header class="container mx-auto max-w-3xl p-4">
         <nav class="flex justify-between">
           <div>
             <svg
@@ -30,7 +30,7 @@
         </nav>
       </header>
 
-      <div class="flex-1">
+      <div class="flex-1 px-4">
         <NuxtPage />
       </div>
     </Body>
