@@ -1,8 +1,14 @@
+<script setup lang="ts">
+useServerSeoMeta({
+  title: "Tic-Tac-Toe",
+  description: "A tic-tac-toe game with nice animations and an online mode",
+  ogDescription: "A tic-tac-toe game with nice animations and an online mode",
+  ogImage: "/og.png",
+})
+</script>
+
 <template>
   <Html class="h-full">
-    <Head>
-      <Title>Tic-Tac-Toe</Title>
-    </Head>
     <Body
       class="h-full select-none bg-black text-white-mute antialiased [&>div]:h-full [&>div]:flex [&>div]:flex-col"
     >
@@ -36,7 +42,3 @@
     </Body>
   </Html>
 </template>
-
-<style>
-/*  */
-</style>
