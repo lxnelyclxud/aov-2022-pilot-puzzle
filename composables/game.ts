@@ -16,8 +16,6 @@ const check = (board: Board, player: Player): Line | null =>
 
 const createBoard = (): Board => Array(9).fill(null)
 
-const randomPlayer = (): Player => [Player.X, Player.O][Math.round(Math.random())]
-
 const isFull = (board: Board): boolean => !board.includes(null)
 
 const next = (player: Player): Player => swap(player, Player.X, Player.O)
@@ -25,7 +23,13 @@ const next = (player: Player): Player => swap(player, Player.X, Player.O)
 const move = (index: number, player: Player, board: Board): Board =>
   board[index] || isFull(board) ? board : setByIndex(index, player, board)
 
-const minimax = (board: Board, depth: number, isMaximizingPlayer: boolean): number => {
+const minimax = (
+  board: Board,
+  depth: number,
+  isMaximizingPlayer: boolean,
+  alpha: number,
+  beta: number
+): number => {
   if (check(board, Player.X)) return -1
 
   if (check(board, Player.O)) return 1
@@ -38,9 +42,11 @@ const minimax = (board: Board, depth: number, isMaximizingPlayer: boolean): numb
     for (let i = 0; i < board.length; i++) {
       if (board[i] === null) {
         board[i] = Player.O
-        const score = minimax(board, depth + 1, false)
+        const score = minimax(board, depth + 1, false, alpha, beta)
         board[i] = null
         bestScore = Math.max(score, bestScore)
+        alpha = Math.max(alpha, score)
+        if (beta <= alpha) break
       }
     }
 
@@ -51,9 +57,11 @@ const minimax = (board: Board, depth: number, isMaximizingPlayer: boolean): numb
     for (let i = 0; i < board.length; i++) {
       if (board[i] === null) {
         board[i] = Player.X
-        const score = minimax(board, depth + 1, true)
+        const score = minimax(board, depth + 1, true, alpha, beta)
         board[i] = null
         bestScore = Math.min(score, bestScore)
+        beta = Math.min(beta, score)
+        if (beta <= alpha) break
       }
     }
 
@@ -64,16 +72,19 @@ const minimax = (board: Board, depth: number, isMaximizingPlayer: boolean): numb
 const findBestMove = (board: Board): number => {
   let bestScore = Number.NEGATIVE_INFINITY
   let bestMove = -1
+  let alpha = Number.NEGATIVE_INFINITY
+  let beta = Number.POSITIVE_INFINITY
 
   for (let i = 0; i < board.length; i++) {
     if (board[i] === null) {
       board[i] = Player.O
-      const score = minimax(board, 0, false)
+      const score = minimax(board, 0, false, alpha, beta)
       board[i] = null
       if (score > bestScore) {
         bestScore = score
         bestMove = i
       }
+      alpha = Math.max(alpha, score)
     }
   }
 
@@ -84,7 +95,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const useGame = () => {
   const board = ref<Board>(createBoard())
-  const player = ref<Player>(randomPlayer())
+  const player = ref<Player>(Player.O)
   const winLine = ref<Line | null>(null)
   const finished = computed(() => isFull(board.value) || !!winLine.value)
   const makeMove = (index: number) => {
@@ -101,12 +112,12 @@ export const useGame = () => {
     winLine: computed(() => winLine.value),
     restart: () => {
       board.value = createBoard()
-      player.value = randomPlayer()
+      player.value = Player.O
       winLine.value = null
     },
     move: async (index: number) => {
       makeMove(index)
-      await sleep(600)
+      await sleep(500)
       if (!finished.value) {
         makeMove(findBestMove(board.value))
       }

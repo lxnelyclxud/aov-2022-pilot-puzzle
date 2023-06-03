@@ -3,7 +3,7 @@ const { board, finished, winLine, player, move, restart } = useGame()
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col justify-center items-center" @click.right.prevent>
+  <div class="flex h-full flex-col justify-center items-center" @click.right.prevent>
     <GameBoard v-bind="{ board, finished, winLine, player }" @move="move" />
 
     <button
