@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Motion } from "motion/vue"
+import { Motion } from "@motionone/vue"
 import { Board, Line, Player } from "~/types"
 
 type Props = {
