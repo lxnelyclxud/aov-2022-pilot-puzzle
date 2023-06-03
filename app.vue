@@ -1,8 +1,10 @@
 <script setup lang="ts">
+const description = "A simple tic-tac-toe game with nice animations"
+
 useServerSeoMeta({
   title: "Tic-Tac-Toe",
-  description: "A tic-tac-toe game with nice animations and an online mode",
-  ogDescription: "A tic-tac-toe game with nice animations and an online mode",
+  description: description,
+  ogDescription: description,
   ogImage: "/og.png",
 })
 </script>
@@ -28,11 +30,6 @@ useServerSeoMeta({
               />
             </svg>
           </div>
-
-          <ul class="flex gap-4">
-            <li><NuxtLink to="/" active-class="text-green">Bot</NuxtLink></li>
-            <li><NuxtLink class="text-gray">Online</NuxtLink></li>
-          </ul>
         </nav>
       </header>
 
