@@ -117,7 +117,7 @@ export const useGame = () => {
     },
     move: async (index: number) => {
       makeMove(index)
-      await sleep(500)
+      await sleep(600)
       if (!finished.value) {
         makeMove(findBestMove(board.value))
       }
