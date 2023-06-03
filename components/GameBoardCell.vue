@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Motion } from 'motion/vue'
-import { random as rnd } from '@/utils'
-import { Player, type Cell } from '@/types'
+import { Motion } from "motion/vue"
+import { Player, Cell } from "~/types"
 
 type Props = {
   value: Cell
@@ -12,23 +11,25 @@ defineProps<Props>()
 
 const DURATION = 0.6
 
+const rnd = random
+
 const transition = (duration = DURATION, delay = 0) => ({
   duration,
   delay,
-  ease: 'ease-out'
+  ease: "ease-out",
 })
 
 const draw = (progress = 1) => ({
-  pathLength: '1',
+  pathLength: "1",
   initial: {
-    visibility: 'hidden',
+    visibility: "hidden",
     strokeDasharray: 1,
-    strokeDashoffset: 1
+    strokeDashoffset: 1,
   },
   animate: {
-    visibility: 'visible',
-    strokeDashoffset: 1 - progress
-  }
+    visibility: "visible",
+    strokeDashoffset: 1 - progress,
+  },
 })
 </script>
 

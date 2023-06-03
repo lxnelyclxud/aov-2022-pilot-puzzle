@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Motion } from 'motion/vue'
-import { random as rnd } from '@/utils'
-import { Board, Line, Player } from '@/types'
-import GameBoardCell from '@/components/GameBoardCell.vue'
+import { Motion } from "motion/vue"
+import { Board, Line, Player } from "~/types"
 
 type Props = {
   board: Board
@@ -13,21 +10,23 @@ type Props = {
 }
 
 type Emits = {
-  (e: 'move', index: number): void
+  (e: "move", index: number): void
 }
 
 defineProps<Props>()
 
 defineEmits<Emits>()
 
+const DURATION = 0.3
+
+const rnd = random
+
 const lines = [
   [100 / 3, 0, 100 / 3, 100],
   [(100 / 3) * 2, 0, (100 / 3) * 2, 100],
   [0, 100 / 3, 100, 100 / 3],
-  [0, (100 / 3) * 2, 100, (100 / 3) * 2]
+  [0, (100 / 3) * 2, 100, (100 / 3) * 2],
 ].map((line) => line.map((v) => rnd(v - 2, v + 2)))
-
-const DURATION = 0.3
 
 const drawing = ref(0)
 
@@ -70,16 +69,16 @@ const winLineCoords = (line: Line) => {
             :initial="{
               visibility: 'hidden',
               strokeDasharray: 1,
-              strokeDashoffset: 1
+              strokeDashoffset: 1,
             }"
             :animate="{
               visibility: 'visible',
-              strokeDashoffset: 0
+              strokeDashoffset: 0,
             }"
             :transition="{
               duration: DURATION,
               delay: DURATION * idx,
-              easing: 'ease-out'
+              easing: 'ease-out',
             }"
             tag="line"
             pathLength="1"
@@ -117,16 +116,16 @@ const winLineCoords = (line: Line) => {
             :initial="{
               visibility: 'hidden',
               strokeDasharray: 1,
-              strokeDashoffset: 1
+              strokeDashoffset: 1,
             }"
             :animate="{
               visibility: 'visible',
-              strokeDashoffset: 0
+              strokeDashoffset: 0,
             }"
             :transition="{
               duration: DURATION,
               delay: DURATION,
-              easing: 'ease-out'
+              easing: 'ease-out',
             }"
             tag="line"
             pathLength="1"

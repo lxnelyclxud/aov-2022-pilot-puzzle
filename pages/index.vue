@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import GameBoard from '@/components/GameBoard.vue'
-import { useGame } from '@/composables/game'
-
 const { board, finished, winLine, player, move, restart } = useGame()
 </script>
 

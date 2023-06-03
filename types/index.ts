@@ -1,6 +1,6 @@
 export enum Player {
-  X = 'X',
-  O = 'O'
+  X = "X",
+  O = "O",
 }
 
 export type Cell = Player | null

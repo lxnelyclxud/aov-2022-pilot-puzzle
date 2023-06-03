@@ -1,6 +1,4 @@
-import { ref, computed } from 'vue'
-import { Line, Player, Board } from '@/types'
-import { setByIndex, swap } from '@/utils'
+import { Board, Line, Player } from "~/types"
 
 const LINES: Line[] = [
   [0, 1, 2],
@@ -10,7 +8,7 @@ const LINES: Line[] = [
   [1, 4, 7],
   [2, 5, 8],
   [0, 4, 8],
-  [2, 4, 6]
+  [2, 4, 6],
 ]
 
 const check = (board: Board, player: Player): Line | null =>
@@ -48,6 +46,6 @@ export const useGame = () => {
       player.value = next(player.value)
       board.value = move(index, player.value, board.value)
       winLine.value = check(board.value, player.value)
-    }
+    },
   }
 }
