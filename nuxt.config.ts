@@ -4,4 +4,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ["motion/vue", "@motionone/vue"],
   },
+  routeRules: {
+    "/": {
+      prerender: true,
+    },
+  },
 })
