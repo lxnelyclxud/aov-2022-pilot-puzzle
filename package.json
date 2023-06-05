@@ -9,8 +9,11 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@nuxtjs/tailwindcss": "^6.7.0",
     "@types/node": "^18",
+    "eslint": "^8.42.0",
+    "eslint-plugin-import": "^2.27.5",
     "nuxt": "^3.5.2"
   },
   "dependencies": {

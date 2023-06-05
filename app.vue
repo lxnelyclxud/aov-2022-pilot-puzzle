@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const description = "A simple tic-tac-toe game with nice animations"
+const description = 'A simple tic-tac-toe game with nice animations'
 
 useServerSeoMeta({
-  title: "Tic-Tac-Toe",
-  description: description,
+  title: 'Tic-Tac-Toe',
+  description,
   ogDescription: description,
-  ogImage: "/og.png",
+  ogImage: '/og.png'
 })
 </script>
 

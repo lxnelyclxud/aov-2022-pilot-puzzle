@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { move, restart, state } = useAiGame()
+const { move, restart, state } = useLocalGame()
 </script>
 
 <template>
