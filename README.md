@@ -1,1 +1,1 @@
-## A simple Tic-tac-toe project to experiment and have fun
+## A simple Tic-tac-toe project with nice animations
