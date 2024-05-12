@@ -1,53 +1,54 @@
 <script setup lang="ts">
-import { Motion } from '@motionone/vue'
-import { Board, Line, Player } from '~/types'
+import { Motion } from "@motionone/vue";
 
 type Props = {
-  board: Board
-  turn: Player
-  finished: boolean
-  winLine: Line | null
-  winner: Player | null
-  moveInProgress: boolean
-}
+  board: Board;
+  turn: Player;
+  finished: boolean;
+  winLine: Line | null;
+  winner: Player | null;
+  moveInProgress: boolean;
+};
 
 type Emits = {
-  (e: 'move', index: number): void
-}
+  (e: "move", index: number): void;
+};
 
-defineProps<Props>()
+defineProps<Props>();
 
-defineEmits<Emits>()
+defineEmits<Emits>();
 
-const DURATION = 0.3
+const DURATION = 0.3;
 
-const rnd = random
+const rnd = random;
 
 const lines = [
   [100 / 3, 0, 100 / 3, 100],
   [(100 / 3) * 2, 0, (100 / 3) * 2, 100],
   [0, 100 / 3, 100, 100 / 3],
-  [0, (100 / 3) * 2, 100, (100 / 3) * 2]
-].map(line => line.map(v => rnd(v - 2, v + 2)))
+  [0, (100 / 3) * 2, 100, (100 / 3) * 2],
+].map((line) => line.map((v) => rnd(v - 2, v + 2)));
 
-const drawing = ref(0)
+const drawing = ref(0);
 
 const indexToCoords = (idx: number) =>
-  [idx % 3, Math.floor(idx / 3)].map(v => (v / 2) * 100) as [number, number]
+  [idx % 3, Math.floor(idx / 3)].map((v) => (v / 2) * 100) as [number, number];
 
 const centered = (x1: number, x2: number) => {
-  if (x1 !== x2 || (x1 !== 0 && x1 !== 100)) { return [x1, x2] }
-  const centered = x1 === 0 ? 100 / 6 : (100 / 6) * 5
-  return [centered, centered]
-}
+  if (x1 !== x2 || (x1 !== 0 && x1 !== 100)) {
+    return [x1, x2];
+  }
+  const centered = x1 === 0 ? 100 / 6 : (100 / 6) * 5;
+  return [centered, centered];
+};
 
 const winLineCoords = (line: Line) => {
-  const [x1, y1] = indexToCoords(line[0])
-  const [x2, y2] = indexToCoords(line[2])
-  const [cx1, cx2] = centered(x1, x2).map(v => rnd(v - 3, v + 3))
-  const [cy1, cy2] = centered(y1, y2).map(v => rnd(v - 3, v + 3))
-  return { x1: cx1, y1: cy1, x2: cx2, y2: cy2 }
-}
+  const [x1, y1] = indexToCoords(line[0]);
+  const [x2, y2] = indexToCoords(line[2]);
+  const [cx1, cx2] = centered(x1, x2).map((v) => rnd(v - 3, v + 3));
+  const [cy1, cy2] = centered(y1, y2).map((v) => rnd(v - 3, v + 3));
+  return { x1: cx1, y1: cy1, x2: cx2, y2: cy2 };
+};
 </script>
 
 <template>
@@ -111,7 +112,7 @@ const winLineCoords = (line: Line) => {
           stroke="currentColor"
           stroke-width="1.8"
           class="absolute inset-0"
-          :class="winner === Player.X ? 'text-green' : 'text-red'"
+          :class="winner === PlayerValue.X ? 'text-green' : 'text-red'"
         >
           <Motion
             v-bind="winLineCoords(winLine)"

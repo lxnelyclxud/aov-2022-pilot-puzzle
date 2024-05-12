@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const description = 'A simple tic-tac-toe game with nice animations'
+const description = "A simple tic-tac-toe game with nice animations";
 
 useServerSeoMeta({
-  title: 'Tic-Tac-Toe',
+  title: "Tic-Tac-Toe",
   description,
   ogDescription: description,
-  ogImage: '/og.png'
-})
+  ogImage: "/og.png",
+});
 </script>
 
 <template>
@@ -34,8 +34,16 @@ useServerSeoMeta({
       </header>
 
       <div class="flex-1 px-4">
-        <NuxtPage />
+        <ClientOnly>
+          <NuxtPage />
+        </ClientOnly>
       </div>
     </Body>
   </Html>
 </template>
+
+<style>
+:root {
+  color-scheme: dark;
+}
+</style>

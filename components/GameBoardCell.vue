@@ -1,36 +1,35 @@
 <script setup lang="ts">
-import { Motion } from '@motionone/vue'
-import { Cell, Player } from '~/types'
+import { Motion } from "@motionone/vue";
 
 type Props = {
-  value: Cell
-  disabled?: boolean
-}
+  value: Cell;
+  disabled?: boolean;
+};
 
-defineProps<Props>()
+defineProps<Props>();
 
-const DURATION = 0.6
+const DURATION = 0.6;
 
-const rnd = random
+const rnd = random;
 
 const transition = (duration = DURATION, delay = 0) => ({
   duration,
   delay,
-  ease: 'ease-out'
-})
+  ease: "ease-out",
+});
 
 const draw = (progress = 1) => ({
-  pathLength: '1',
+  pathLength: "1",
   initial: {
-    visibility: 'hidden',
+    visibility: "hidden",
     strokeDasharray: 1,
-    strokeDashoffset: 1
+    strokeDashoffset: 1,
   },
   animate: {
-    visibility: 'visible',
-    strokeDashoffset: 1 - progress
-  }
-})
+    visibility: "visible",
+    strokeDashoffset: 1 - progress,
+  },
+});
 </script>
 
 <template>
@@ -47,7 +46,7 @@ const draw = (progress = 1) => ({
       stroke-linejoin="round"
     >
       <Transition leave-active-class="opacity-0 transition duration-300">
-        <g v-if="value === Player.X" class="text-green">
+        <g v-if="value === PlayerValue.X" class="text-green">
           <Motion
             v-bind="draw()"
             :transition="transition(DURATION / 2)"
@@ -63,7 +62,7 @@ const draw = (progress = 1) => ({
         </g>
 
         <Motion
-          v-else-if="value === Player.O"
+          v-else-if="value === PlayerValue.O"
           v-bind="draw(rnd(0.92, 1))"
           :rx="`${rnd(6, 8)}`"
           :ry="`${rnd(6, 8)}`"
